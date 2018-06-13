@@ -1,5 +1,13 @@
 import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import InvoiceDisplayContainer from './containers/InvoiceDisplayContainer.jsx';
 
-const App = () => <div>Hello World</div>;
+const App = () => (
+  <app>
+    <Switch>
+      <Route exact path='/' component={InvoiceDisplayContainer} />
+    </Switch>
+  </app>
+);
 
 export default App;
