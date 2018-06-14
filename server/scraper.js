@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const request = require('request');
 const mcache = require('memory-cache');
 const fetch = require('node-fetch');
-const moment = require('moment')
+const moment = require('moment');
 
 const beaches = {
   venice: 'https://www.surfline.com/surf-report/venice-breakwater/590927576a2e4300134fbed8',
@@ -19,7 +19,7 @@ function cleanString(str) {
 
 function convertAngleToCompass(degrees) {
   const directionsIndex = Math.floor((degrees / 22.5) + 0.5);
-  const compass = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+  const compass = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
   return compass[(directionsIndex % 16)];
 }
 
@@ -66,7 +66,6 @@ async function surfToObject($, url) {
     .slice(0, 3);
   const tideInfo = await fetchAndProcessTides(url);
   const windInfo = await fetchAndProcessWind(url);
-  console.log(windInfo)
   return {
     location: cleanedLocationData,
     tides: tideInfo,
@@ -105,9 +104,10 @@ const scrapeController = {
       res.send(mcache.get('all'));
       return;
     }
-    console.log('hit')
     const allBeachData = [
       oneBeach(beaches.venice),
+      oneBeach(beaches.trestles),
+      oneBeach(beaches.ventura),
     ];
     Promise.all(allBeachData).then((fulfilled) => {
       mcache.put('all', fulfilled);

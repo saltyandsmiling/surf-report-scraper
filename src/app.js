@@ -25,16 +25,15 @@ class App extends React.Component {
       );
     } else {
       const surfReports = this.state.data.map((singleSurfReport, ind) => {
-        const { tide, swells, conditionDetails, waveHeight, forecast } = singleSurfReport;
+        const { location, swells, tides, wind } = singleSurfReport;
         return (
           <div key={ind}>
             <Card>
               <CardContent>
-                <li>{tide}</li>
+                <li>{location}</li>
                 <li>{swells}</li>
-                <li>{conditionDetails}</li>
-                <li>{waveHeight}</li>
-                <li>{forecast}</li>
+                <li>{tides}</li>
+                <li>{wind}</li>
               </CardContent>
             </Card>
           </div>
