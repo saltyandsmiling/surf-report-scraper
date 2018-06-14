@@ -19,6 +19,7 @@ function surfToObject($) {
   const todaysDate = new Date();
   const dateString = todaysDate.toDateString();
   return {
+
     tide: 'Tide: ' + $('.sl-reading').text().split('FT')[0] + ' FT.',
     swells: $('.sl-spot-forecast-summary__stat-swells').text().split('Swells')[1],
     day: dateString,
@@ -58,6 +59,7 @@ const scrapeController = {
       res.send(mcache.get('all'));
       return;
     }
+    console.log('hit')
     const allBeachData = [
       oneBeach(beaches.venice),
       oneBeach(beaches.trestles),
