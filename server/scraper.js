@@ -17,7 +17,7 @@ function cleanString(str) {
 
 function surfToObject($) {
   const todaysDate = new Date();
-  let dateString = todaysDate.toDateString();
+  const dateString = todaysDate.toDateString();
   return {
     tide: 'Tide: ' + $('.sl-reading').text().split('FT')[0] + ' FT.',
     swells: $('.sl-spot-forecast-summary__stat-swells').text().split('Swells')[1],
@@ -29,17 +29,10 @@ function surfToObject($) {
 }
 
 function oneBeach(url) {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     request(url, (error, response, html) => {
       const $ = cheerio.load(html);
-      const surf = {
-        conditionOverview: $('#observed-spot-conditions').text(),
-        day: cleanString($('div .module span strong').text()).split('at ')[0],
-        conditionDetails: cleanString($('#observed-spot-conditions-summary p').text()),
-        waveHeight: $('#observed-wave-range').text(),
-        waveDescription: cleanString($('#observed-wave-description').text()),
-      };
-      console.log(surf)
+      const surf = surfToObject($);
       resolve(surf);
     });
   });
@@ -70,11 +63,10 @@ const scrapeController = {
       oneBeach(beaches.trestles),
       oneBeach(beaches.ventura),
     ];
-    (() => {Promise.all(allBeachData).then((fulfilled) => {
+    Promise.all(allBeachData).then((fulfilled) => {
       mcache.put('all', fulfilled);
       res.send(fulfilled);
     });
-    })();
   },
 
   // end of scrape controller
