@@ -2,6 +2,7 @@ const cheerio = require('cheerio');
 const request = require('request');
 const mcache = require('memory-cache');
 const fetch = require('node-fetch');
+const moment = require('moment')
 
 const beaches = {
   venice: 'https://www.surfline.com/surf-report/venice-breakwater/590927576a2e4300134fbed8',
@@ -16,13 +17,42 @@ function cleanString(str) {
   return str.replace(/\r?\n|\r|-/g, '').trim();
 }
 
-function getTides(url) {
+function convertAngleToCompass(degrees) {
+  const directionsIndex = Math.floor((degrees / 22.5) + 0.5);
+  const compass = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+  return compass[(directionsIndex % 16)];
+}
+
+function fetchAndProcessTides(url) {
   const locationId = url.split('/').pop();
   const surflineTideApiCall = `https://services.surfline.com/kbyg/spots/forecasts/tides?spotId=${locationId}&days=1&accesstoken=7fc56562b343878b456943a4216bfa4d08aadcbe`;
   return fetch(surflineTideApiCall)
     .then(res => res.json())
-    .then((res) => res.data.tides.filter(el => el.type !== 'NORMAL'))
-    .then(tides => tides)
+    .then(res => res.data.tides.filter(el => el.type !== 'NORMAL'))
+    .then((tidesWithUnix) => {
+      return tidesWithUnix.map((el) => {
+        const formatedData = el;
+        formatedData.timestamp = moment.unix(el.timestamp).local().format('h:mm a');
+        return formatedData;
+      });
+    });
+}
+
+function fetchAndProcessWind(url) {
+  const locationId = url.split('/').pop();
+  const indexesToKeep = [6, 9, 12, 15, 18];
+  const surflineWindApiCall = `https://services.surfline.com/kbyg/spots/forecasts/wind?spotId=${locationId}&days=1&intervalHours=1&accesstoken=7fc56562b343878b456943a4216bfa4d08aadcbe`;
+  return fetch(surflineWindApiCall)
+    .then(res => res.json())
+    .then(res => res.data.wind.filter((el, ind) => indexesToKeep.includes(ind)))
+    .then((partialWindInfo) => partialWindInfo.map((el) => {
+      const formatedData = el;
+      formatedData.timestamp = moment.unix(el.timestamp).local().format('h:mm a');
+      formatedData.direction = convertAngleToCompass(formatedData.direction);
+      delete formatedData.optimalScore;
+      return formatedData;
+    }),
+    );
 }
 
 async function surfToObject($, url) {
@@ -34,12 +64,14 @@ async function surfToObject($, url) {
     .replace('Swells', '')
     .split('º')
     .slice(0, 3);
-  const tideInfo = await getTides(url).then(tides => tides);
+  const tideInfo = await fetchAndProcessTides(url);
+  const windInfo = await fetchAndProcessWind(url);
+  console.log(windInfo)
   return {
     location: cleanedLocationData,
     tides: tideInfo,
     swells: cleanedSwellData,
-
+    wind: windInfo,
   };
 }
 
@@ -76,8 +108,6 @@ const scrapeController = {
     console.log('hit')
     const allBeachData = [
       oneBeach(beaches.venice),
-      oneBeach(beaches.trestles),
-      oneBeach(beaches.ventura),
     ];
     Promise.all(allBeachData).then((fulfilled) => {
       mcache.put('all', fulfilled);
