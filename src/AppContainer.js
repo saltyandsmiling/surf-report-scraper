@@ -19,7 +19,7 @@ class AppContainer extends React.Component {
 
   render() {
     if (!this.state.data) return <div> loading... </div>;
-    return <ReportCard data={this.state.data} />;
+    return <ReportCard data={this.state.data[0]} />;
   }
 }
 

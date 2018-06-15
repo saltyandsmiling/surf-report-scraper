@@ -29,13 +29,11 @@ function fetchAndProcessTides(url) {
   return fetch(surflineTideApiCall)
     .then(res => res.json())
     .then(res => res.data.tides.filter(el => el.type !== 'NORMAL'))
-    .then((tidesWithUnix) => {
-      return tidesWithUnix.map((el) => {
-        const formatedData = el;
-        formatedData.timestamp = moment.unix(el.timestamp).local().format('h:mm a');
-        return formatedData;
-      });
-    });
+    .then(tidesWithUnix => tidesWithUnix.map((el) => {
+      const formatedData = el;
+      formatedData.timestamp = moment.unix(el.timestamp).local().format('h:mma');
+      return formatedData;
+    }));
 }
 
 function fetchAndProcessWind(url) {
@@ -45,14 +43,13 @@ function fetchAndProcessWind(url) {
   return fetch(surflineWindApiCall)
     .then(res => res.json())
     .then(res => res.data.wind.filter((el, ind) => indexesToKeep.includes(ind)))
-    .then((partialWindInfo) => partialWindInfo.map((el) => {
+    .then(partialWindInfo => partialWindInfo.map((el) => {
       const formatedData = el;
-      formatedData.timestamp = moment.unix(el.timestamp).local().format('h:mm a');
+      formatedData.timestamp = moment.unix(el.timestamp).local().format('h:mma');
       formatedData.direction = convertAngleToCompass(formatedData.direction);
       delete formatedData.optimalScore;
       return formatedData;
-    }),
-    );
+    }));
 }
 
 async function surfToObject($, url) {
@@ -106,8 +103,8 @@ const scrapeController = {
     }
     const allBeachData = [
       oneBeach(beaches.venice),
-      oneBeach(beaches.trestles),
-      oneBeach(beaches.ventura),
+      // oneBeach(beaches.trestles),
+      // oneBeach(beaches.ventura),
     ];
     Promise.all(allBeachData).then((fulfilled) => {
       mcache.put('all', fulfilled);
