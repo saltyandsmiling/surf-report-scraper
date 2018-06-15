@@ -103,8 +103,8 @@ const scrapeController = {
     }
     const allBeachData = [
       oneBeach(beaches.venice),
-      // oneBeach(beaches.trestles),
-      // oneBeach(beaches.ventura),
+      oneBeach(beaches.trestles),
+      oneBeach(beaches.ventura),
     ];
     Promise.all(allBeachData).then((fulfilled) => {
       mcache.put('all', fulfilled);

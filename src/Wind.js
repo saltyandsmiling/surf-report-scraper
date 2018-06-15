@@ -26,7 +26,8 @@ const Wind = (props) => {
       {wind.map(el => (
         <Typography variant="body2" classes={{root: classes.info}}>
           {el.timestamp} <br />
-          {el.speed}kts {el.direction}
+          {el.speed}kts <br />
+          {el.direction}
         </Typography>
       ))}
     </div>

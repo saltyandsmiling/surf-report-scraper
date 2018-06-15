@@ -1,6 +1,12 @@
 import React from 'react';
 import ReportCard from './ReportCard';
+import { withStyles } from '@material-ui/core/styles';
 
+const styles = {
+  root: {
+    float: 'left',
+  },
+};
 
 class AppContainer extends React.Component {
   constructor() {
@@ -19,8 +25,11 @@ class AppContainer extends React.Component {
 
   render() {
     if (!this.state.data) return <div> loading... </div>;
-    return <ReportCard data={this.state.data[0]} />;
+    const reportCards = this.state.data.map(locationData => {
+      return <ReportCard styles={styles} data={locationData} />;
+    })
+    return <div>{reportCards}</div>;
   }
 }
 
-export default AppContainer;
+export default withStyles(styles)(AppContainer);
