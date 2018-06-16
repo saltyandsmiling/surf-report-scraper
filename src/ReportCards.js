@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import shortid from 'shortid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -28,7 +29,7 @@ const ReportCards = (props) => {
   const reportCards = data.map((locationData) => {
     const { location, swells, tides, wind } = locationData;
     return (
-      <div>
+      <div key={shortid.generate()}>
         <Card classes={{ root: classes.root }}>
           <CardContent>
             <Typography classes={{ root: classes.header }} gutterBottom>{location}</Typography>

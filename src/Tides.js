@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import shortid from 'shortid';
 
 const Tides = (props) => {
   const { tides } = props;
@@ -8,7 +9,7 @@ const Tides = (props) => {
     <div>
       <Typography variant="subheading" color="textSecondary">Tides</Typography>
       {tides.map(tide => (
-        <Typography variant="body2">
+        <Typography key={shortid.generate()} variant="body2">
           {tide.type === 'LOW' ? 'Low' : 'High'} of {tide.height} @ {tide.timestamp}
         </Typography>
       ))}

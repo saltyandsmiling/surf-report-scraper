@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import shortid from 'shortid';
 
 const styles = {
   header: {
@@ -24,7 +25,7 @@ const Wind = (props) => {
         Wind
       </Typography>
       {wind.map(localWind => (
-        <Typography variant="body2" classes={{ root: classes.info }}>
+        <Typography key={shortid.generate()} variant="body2" classes={{ root: classes.info }}>
           {localWind.timestamp} <br />
           {localWind.speed}kts <br />
           {localWind.direction}
@@ -38,7 +39,11 @@ Wind.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.string,
   }).isRequired,
-  wind: PropTypes.arrayOf(PropTypes.string).isRequired,
+  wind: PropTypes.arrayOf(PropTypes.shape({
+    timestamp: PropTypes.string.isRequired,
+    speed: PropTypes.number.isRequired,
+    direction: PropTypes.string.isRequired,
+  })).isRequired,
 };
 
 export default withStyles(styles)(Wind);

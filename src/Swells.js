@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import shortid from 'shortid';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
+
 
 const styles = {
   root: {
@@ -20,7 +22,11 @@ const Swells = (props) => {
     <div>
       <CardContent classes={{ root: classes.root }}>
         <Typography color="textSecondary" variant="subheading">Swells</Typography>
-        {swells.map(localSwellInfo => <Typography variant="body2">{localSwellInfo}</Typography>)}
+        {swells.map((localSwellInfo) => (
+          <Typography key={shortid.generate()} variant="body2">
+            {localSwellInfo}
+          </Typography>
+        ))}
       </CardContent>
     </div>
   );
