@@ -1,11 +1,6 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-
-
-const styles = {
-
-};
 
 const Tides = (props) => {
   const { tides } = props;
@@ -21,5 +16,12 @@ const Tides = (props) => {
   );
 };
 
+Tides.propTypes = {
+  tides: PropTypes.arrayOf(PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    height: PropTypes.number.isRequired,
+    timestamp: PropTypes.string.isRequired,
+  })).isRequired,
+};
 
-export default withStyles(styles)(Tides);
+export default Tides;

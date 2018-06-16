@@ -41,6 +41,7 @@
     "memory-cache": "^0.2.0",
     "moment": "^2.22.2",
     "node-fetch": "^2.1.2",
+    "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-router-dom": "^4.2.2",
