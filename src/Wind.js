@@ -7,6 +7,7 @@ import shortid from 'shortid';
 const styles = {
   header: {
     textAlign: 'center',
+    width: '100%',
     paddingTop: '5px',
   },
   info: {

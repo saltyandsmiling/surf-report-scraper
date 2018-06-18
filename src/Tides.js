@@ -14,6 +14,7 @@ const Tides = (props) => {
         </Typography>
       ))}
     </div>
+
   );
 };
 
