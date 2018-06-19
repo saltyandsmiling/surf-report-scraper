@@ -1,20 +1,17 @@
 import * as enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import 'isomorphic-fetch';
 import React from 'react';
 import ReportCardContainer from '../src/ReportCardContainer';
 
-import renderer from 'react-test-renderer';
-
 enzyme.configure({ adapter: new Adapter() });
-
 
 describe('ReportCardContainer', () => {
   let props;
   let mountedRCContainer;
+
   const rcContainer = () => {
     if (!mountedRCContainer) {
-      mountedRCContainer = enzyme.mount(<ReportCardContainer {...props} />);
+      mountedRCContainer = enzyme.shallow(<ReportCardContainer {...props} />);
     }
     return mountedRCContainer;
   };
@@ -26,8 +23,23 @@ describe('ReportCardContainer', () => {
     mountedRCContainer = undefined;
   });
 
-  it('returns a single div element if data is undefined', () => {
-    const divs = rcContainer().find('div');
-    expect(divs.length).toBeGreaterThan(0);
-  })
+  it('does not render <ReportCards /> if this.state.data is null', () => {
+    const ReportCards = rcContainer().find('div');
+
+    expect(ReportCards.length).toEqual(1);
+  });
+
+  // it('does render <ReportCards /> if this.state.data is not null', () => {
+  //   const ReportCards = rcContainer().find('ReportCards');
+  //   ReportCards.setState({ data: {}});
+  //   expect(ReportCards.length).toEqual(1);
+  //
+  // })
+
 });
+
+/*
+tests to add
+'<ReportCards /> renders if this.state.data is passed'
+'componentDidMount makes API call and sets state based on results'
+ */
