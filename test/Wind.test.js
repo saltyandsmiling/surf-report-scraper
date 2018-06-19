@@ -21,7 +21,7 @@ describe('WindComponent', () => {
   beforeEach(() => {
     props = {
       classes: {},
-      wind: [{timestamp: 'time', speed: 1, direction: 'SSW'}],
+      wind: [{ timestamp: 'time', speed: 1, direction: 'SSW' }],
     };
     mountedWind = undefined;
   });
